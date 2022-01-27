@@ -18,6 +18,17 @@ typedef enum {
 	INVALID
 } direction;
 
+/*
+enum class direction {
+	UP_LEFT, UP, UP_RIGHT, RIGHT, DOWN_RIGHT, DOWN, DOWN_LEFT, LEFT,
+	TOTAL_REGULAR_DIRECTIONS,
+	FIRST_REGULAR_DIRECTION = UP_LEFT,
+	LAST_REGULAR_DIRECTION = LEFT,
+	NO_MOVE,
+	INVALID
+};
+ */
+
 
 // Opposite direction
 direction operator!(const direction& d) {
@@ -38,6 +49,26 @@ direction operator!(const direction& d) {
 	}
 }
 
+direction vectToDirection(int x, int y) {
+	if(y < 0) {
+		if(x < 0)
+			return UP_LEFT;
+		if(x == 0)
+			return UP;
+		else // if(x > 0)
+			return UP_RIGHT;
+	}
+
+	if(y > 0) {
+		if(x < 0)
+			return DOWN_LEFT;
+		if(x == 0)
+			return DOWN;
+		else // if(x > 0)
+			return DOWN_RIGHT;
+	}
+	return NO_MOVE;
+}
 
 class complementaryDirections {
 private:

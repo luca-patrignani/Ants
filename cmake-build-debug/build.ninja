@@ -72,12 +72,6 @@ build CMakeFiles/provaCLion.dir/olcPixelGameEngine.cpp.obj: CXX_COMPILER__provaC
   OBJECT_DIR = CMakeFiles\provaCLion.dir
   OBJECT_FILE_DIR = CMakeFiles\provaCLion.dir
 
-build CMakeFiles/provaCLion.dir/Tests/main.cpp.obj: CXX_COMPILER__provaCLion_Debug C$:/Users/Luca/CLionProjects/provaCLion/Tests/main.cpp || cmake_object_order_depends_target_provaCLion
-  DEP_FILE = CMakeFiles\provaCLion.dir\Tests\main.cpp.obj.d
-  FLAGS = -g -std=gnu++17
-  OBJECT_DIR = CMakeFiles\provaCLion.dir
-  OBJECT_FILE_DIR = CMakeFiles\provaCLion.dir\Tests
-
 
 # =============================================================================
 # Link build statements for EXECUTABLE target provaCLion
@@ -86,7 +80,7 @@ build CMakeFiles/provaCLion.dir/Tests/main.cpp.obj: CXX_COMPILER__provaCLion_Deb
 #############################################
 # Link the executable provaCLion.exe
 
-build provaCLion.exe: CXX_EXECUTABLE_LINKER__provaCLion_Debug CMakeFiles/provaCLion.dir/main.cpp.obj CMakeFiles/provaCLion.dir/olcPixelGameEngine.cpp.obj CMakeFiles/provaCLion.dir/Tests/main.cpp.obj
+build provaCLion.exe: CXX_EXECUTABLE_LINKER__provaCLion_Debug CMakeFiles/provaCLion.dir/main.cpp.obj CMakeFiles/provaCLion.dir/olcPixelGameEngine.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -luser32  -lgdi32  -lopengl32  -lgdiplus  -lShlwapi  -ldwmapi  -lstdc++fs  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\provaCLion.dir

@@ -2,91 +2,15 @@
 
 #include <list>
 #include "olcPixelGameEngine.h"
+#include "direction.h"
 
-typedef olc::vi2d vect;
 typedef olc::vi2d position;
 const position NULLPOS = position(-1, -1);
-
-typedef enum {
-	DUMMY = 0,
-
-	UP_LEFT,             UP,                UP_RIGHT,
-	   LEFT,             NO_MOVE=0,            RIGHT=-LEFT,
-  DOWN_LEFT=-UP_RIGHT,   DOWN = -UP,      DOWN_RIGHT=-UP_LEFT,
-
-  TOTAL_DIRECTIONS
-} direction;
-
-// Opposite direction
-direction operator!(const direction& d) {
-	switch (d) {
-		case UP_LEFT: return DOWN_RIGHT;
-		case UP: return DOWN;
-		case UP_RIGHT: return DOWN_LEFT;
-
-		case LEFT: return RIGHT;
-		case NO_MOVE: return NO_MOVE;
-		case RIGHT: return LEFT;
-
-		case DOWN_LEFT: return UP_RIGHT;
-		case DOWN: return UP;
-		case DOWN_RIGHT: return UP_LEFT;
-
-		default: throw std::invalid_argument("Invalid direction\n");
-	}
-}
-
-
-vect directionToVect(const direction d) {
-	switch (d) {
-		case UP_LEFT: return {-1, -1};
-		case UP: return {0, -1};
-		case UP_RIGHT: return {1, -1};
-
-		case LEFT: return {-1, 0};
-		case NO_MOVE: return {0, 0};
-		case RIGHT: return {1, 0};
-
-		case DOWN_LEFT: return {-1, 1};
-		case DOWN: return {0, 1};
-		case DOWN_RIGHT: return {1, 1};
-
-		default: throw std::invalid_argument("Invalid direction\n");
-	}
-}
-
-
-/*direction vectToDirection(const vect v) {
-	switch (v) {
-		case vect(-1, -1): return UP_LEFT;
-		case vect(0, -1): return UP;
-		case vect(1, -1): return UP_RIGHT;
-
-		case vect(-1, 0): return LEFT;
-		case vect(0, 0): return NO_MOVE;
-		case vect(1, 0): return RIGHT;
-
-		case vect(-1, 1): return DOWN_LEFT;
-		case vect(0, 1): return DOWN;
-		case vect(1, 1): return DOWN_RIGHT;
-
-		default: throw std::invalid_argument("Invalid direction\n");
-	}
-}*/
-
-std::vector<direction> complementary(const direction& d) {
-	switch (d) {
-		
-	}
-}
-
-
-
 
 class ant {
 public:
 	position pos;
-
+	position goal;
 	unsigned life;
 	bool ifCarryFood;
 	bool alreadyMoved; // TODO: We'll see if it is needed
@@ -94,7 +18,7 @@ public:
 	olc::PixelGameEngine* pge;
 
 public:
-	position goal;
+	ant() {}
 	/*
 	Construct the ant
 	*/
@@ -151,7 +75,7 @@ public:
 	}
 
 	void setGoal(const position& _goal) { goal = _goal; }
-
+/*
 	void moveToGoal() {
 		int x = pos.x, y = pos.y;
 		int gx = goal.x, gy = goal.y;
@@ -186,6 +110,35 @@ public:
 
 		//if(move(d))
 
+	}
+*/
+	bool moveToGoal() {
+		if(pos == goal)
+			return true;
+
+		// the vector which connects the current position and the goal
+		auto p0p = goal - pos;
+
+		// Prime solution
+		direction movement = vectToDirection(p0p.x, p0p.y);
+		if(move(movement))
+			return true;
+
+		// Complementary solution
+		auto cd = complementaryDirections(movement);
+		direction newMovement;
+		do {
+			newMovement = cd.next();
+			if(move(newMovement))
+				return true;
+		} while(newMovement != NO_MOVE);
+
+		// Opposite solution
+		if(move(!movement))
+			return true;
+
+		// If we can do nothing do not move and return false
+		return false;
 	}
 
 };
