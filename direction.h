@@ -8,6 +8,7 @@
 #include <stdexcept>
 #include <cstdlib>
 #include <ctime>
+#include "olcPixelGameEngine.h"
 
 typedef enum {
 	UP_LEFT, UP, UP_RIGHT, RIGHT, DOWN_RIGHT, DOWN, DOWN_LEFT, LEFT,
@@ -70,6 +71,24 @@ direction vectToDirection(int x, int y) {
 	return NO_MOVE;
 }
 
+direction right(const direction d) {
+	if(d + 1 < TOTAL_REGULAR_DIRECTIONS)
+		return (direction) (d + 1);
+	if(d + 1 == TOTAL_REGULAR_DIRECTIONS)
+		return FIRST_REGULAR_DIRECTION;
+	if(d + 1 > TOTAL_REGULAR_DIRECTIONS)
+		throw std::range_error("Non-regular direction\n");
+}
+
+direction left(const direction d) {
+	if(d > 0)
+		return (direction) (d - 1);
+	if(d == 0)
+		return LAST_REGULAR_DIRECTION;
+	if(d < 0)
+		throw std::range_error("Non-regular direction\n");
+}
+
 class complementaryDirections {
 private:
 	direction _right;
@@ -77,25 +96,6 @@ private:
 	bool rightOrLeft; // right -> true, left -> false
 	bool firstOrSecond; // first -> true, second -> false
 	static const bool FIRST = true, SECOND = false;
-
-
-	static direction right(const direction d) {
-		if(d + 1 < TOTAL_REGULAR_DIRECTIONS)
-			return (direction) (d + 1);
-		if(d + 1 == TOTAL_REGULAR_DIRECTIONS)
-			return FIRST_REGULAR_DIRECTION;
-		if(d + 1 > TOTAL_REGULAR_DIRECTIONS)
-			throw std::range_error("Non-regular direction\n");
-	}
-
-	static direction left(const direction d) {
-		if(d > 0)
-			return (direction) (d - 1);
-		if(d == 0)
-			return LAST_REGULAR_DIRECTION;
-		if(d < 0)
-			throw std::range_error("Non-regular direction\n");
-	}
 
 public:
 	explicit complementaryDirections(direction origin) {
@@ -137,8 +137,18 @@ public:
 
 };
 
-/*
-vect directionToVect(const direction d) {
+// Group operator
+bool operator% (const direction d, const direction groupDefiner) {
+	if(d == left(groupDefiner))
+		return true;
+	if(d == groupDefiner)
+		return true;
+	if(d == right(groupDefiner))
+		return true;
+	return false;
+}
+
+olc::vi2d directionToVect(const direction d) {
 	switch (d) {
 		case UP_LEFT: return {-1, -1};
 		case UP: return {0, -1};
@@ -155,7 +165,6 @@ vect directionToVect(const direction d) {
 		default: throw std::invalid_argument("Invalid direction\n");
 	}
 }
-*/
 
 /*direction vectToDirection(const vect v) {
 	switch (v) {

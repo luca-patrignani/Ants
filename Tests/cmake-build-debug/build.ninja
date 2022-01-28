@@ -55,6 +55,12 @@ build CMakeFiles/Tests.dir/main.cpp.obj: CXX_COMPILER__Tests_Debug C$:/Users/Luc
   OBJECT_DIR = CMakeFiles\Tests.dir
   OBJECT_FILE_DIR = CMakeFiles\Tests.dir
 
+build CMakeFiles/Tests.dir/C_/Users/Luca/CLionProjects/provaCLion/olcPixelGameEngine.cpp.obj: CXX_COMPILER__Tests_Debug C$:/Users/Luca/CLionProjects/provaCLion/olcPixelGameEngine.cpp || cmake_object_order_depends_target_Tests
+  DEP_FILE = CMakeFiles\Tests.dir\C_\Users\Luca\CLionProjects\provaCLion\olcPixelGameEngine.cpp.obj.d
+  FLAGS = -g -std=gnu++17
+  OBJECT_DIR = CMakeFiles\Tests.dir
+  OBJECT_FILE_DIR = CMakeFiles\Tests.dir\C_\Users\Luca\CLionProjects\provaCLion
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target Tests
@@ -63,7 +69,7 @@ build CMakeFiles/Tests.dir/main.cpp.obj: CXX_COMPILER__Tests_Debug C$:/Users/Luc
 #############################################
 # Link the executable Tests.exe
 
-build Tests.exe: CXX_EXECUTABLE_LINKER__Tests_Debug CMakeFiles/Tests.dir/main.cpp.obj
+build Tests.exe: CXX_EXECUTABLE_LINKER__Tests_Debug CMakeFiles/Tests.dir/main.cpp.obj CMakeFiles/Tests.dir/C_/Users/Luca/CLionProjects/provaCLion/olcPixelGameEngine.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -luser32  -lgdi32  -lopengl32  -lgdiplus  -lShlwapi  -ldwmapi  -lstdc++fs  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\Tests.dir

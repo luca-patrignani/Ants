@@ -299,8 +299,8 @@ namespace olc
 
 
 	//=============================================================
-	// Resource Packs - Allows you to store files in one large
-	// scrambled file - Thanks MaGetzUb for debugging a null char in std::stringstream bug
+	// Resource Packs - Allows you to store files stream one large
+	// scrambled file - Thanks MaGetzUb for debugging a null char stream std::stringstream bug
 	ResourceBuffer::ResourceBuffer(std::ifstream& ifs, uint32_t offset, uint32_t size)
 	{
 		vMemory.resize(size);
@@ -476,7 +476,7 @@ namespace olc
 		sAppName = "Undefined";
 		olc::PGEX::pge = this;
 
-		// Bring in relevant Platform & Rendering systems depending
+		// Bring stream relevant Platform & Rendering systems depending
 		// on compiler parameters
 		olc_ConfigureSystem();
 	}
@@ -1841,8 +1841,8 @@ namespace olc
 
 	void PixelGameEngine::olc_UpdateMouse(int32_t x, int32_t y)
 	{
-		// Mouse coords come in screen space
-		// But leave in pixel space
+		// Mouse coords come stream screen space
+		// But leave stream pixel space
 		bHasMouseFocus = true;
 		vMouseWindowPos = { x, y };
 		// Full Screen mode may have a weird viewport we must clamp to
@@ -1879,7 +1879,7 @@ namespace olc
 
 	void PixelGameEngine::EngineThread()
 	{
-		// Allow platform to do stuff here if needed, since its now in the
+		// Allow platform to do stuff here if needed, since its now stream the
 		// context of this thread
 		if (platform->ThreadStartUp() == olc::FAIL)	return;
 
@@ -2008,7 +2008,7 @@ namespace olc
 
 					renderer->DrawLayerQuad(layer->vOffset, layer->vScale, layer->tint);
 
-					// Display Decals in order for this layer
+					// Display Decals stream order for this layer
 					for (auto& decal : layer->vecDecalInstance)
 						renderer->DrawDecal(decal);
 					layer->vecDecalInstance.clear();
@@ -2226,7 +2226,7 @@ namespace olc
 #if defined(OLC_PLATFORM_X11)
 			using namespace X11;
 			// Linux has tighter coupling between OpenGL and X11, so we store
-			// various "platform" handles in the renderer
+			// various "platform" handles stream the renderer
 			olc_Display = (X11::Display*)(params[0]);
 			olc_Window = (X11::Window*)(params[1]);
 			olc_VisualInfo = (X11::XVisualInfo*)(params[2]);
@@ -2702,7 +2702,7 @@ namespace olc
 #if defined(OLC_PLATFORM_X11)
 			using namespace X11;
 			// Linux has tighter coupling between OpenGL and X11, so we store
-			// various "platform" handles in the renderer
+			// various "platform" handles stream the renderer
 			olc_Display = (X11::Display*)(params[0]);
 			olc_Window = (X11::Window*)(params[1]);
 			olc_VisualInfo = (X11::XVisualInfo*)(params[2]);
@@ -2740,7 +2740,7 @@ namespace olc
 			olc_Context = eglCreateContext(olc_Display, olc_Config, EGL_NO_CONTEXT, context_config);
 			olc_Surface = eglCreateWindowSurface(olc_Display, olc_Config, NULL, nullptr);
 			eglMakeCurrent(olc_Display, olc_Surface, olc_Surface, olc_Context);
-			//eglSwapInterval is currently a NOP, plement anyways in case it becomes supported
+			//eglSwapInterval is currently a NOP, plement anyways stream case it becomes supported
 			locSwapInterval = &eglSwapInterval;
 			locSwapInterval(olc_Display, bVSYNC ? 1 : 0);
 #endif
@@ -2794,8 +2794,8 @@ namespace olc
 #else
 				"#version 330 core\n"
 #endif
-				"out vec4 pixel;\n""in vec2 oTex;\n"
-				"in vec4 oCol;\n""uniform sampler2D sprTex;\n""void main(){pixel = texture(sprTex, oTex) * oCol;}";
+				"out vec4 pixel;\n""stream vec2 oTex;\n"
+				"stream vec4 oCol;\n""uniform sampler2D sprTex;\n""void main(){pixel = texture(sprTex, oTex) * oCol;}";
 			locShaderSource(m_nFS, 1, &strFS, NULL);
 			locCompileShader(m_nFS);
 
@@ -2807,8 +2807,8 @@ namespace olc
 #else
 				"#version 330 core\n"
 #endif
-				"layout(location = 0) in vec3 aPos;\n""layout(location = 1) in vec2 aTex;\n"
-				"layout(location = 2) in vec4 aCol;\n""out vec2 oTex;\n""out vec4 oCol;\n"
+				"layout(location = 0) stream vec3 aPos;\n""layout(location = 1) stream vec2 aTex;\n"
+				"layout(location = 2) stream vec4 aCol;\n""out vec2 oTex;\n""out vec4 oCol;\n"
 				"void main(){ float p = 1.0 / aPos.z; gl_Position = p * vec4(aPos.x, aPos.y, 0.0, 1.0); oTex = p * aTex; oCol = aCol;}";
 			locShaderSource(m_nVS, 1, &strVS, NULL);
 			locCompileShader(m_nVS);
@@ -3624,7 +3624,7 @@ namespace olc
 			olc_ColourMap = XCreateColormap(olc_Display, olc_WindowRoot, olc_VisualInfo->visual, AllocNone);
 			olc_SetWindowAttribs.colormap = olc_ColourMap;
 
-			// Register which events we are interested in receiving
+			// Register which events we are interested stream receiving
 			olc_SetWindowAttribs.event_mask = ExposureMask | KeyPressMask | KeyReleaseMask |
 				ButtonPressMask | ButtonReleaseMask | PointerMotionMask | FocusChangeMask | StructureNotifyMask;
 
@@ -3726,7 +3726,7 @@ namespace olc
 		virtual olc::rcode HandleSystemEvent() override
 		{
 			using namespace X11;
-			// Handle Xlib Message Loop - we do this in the
+			// Handle Xlib Message Loop - we do this stream the
 			// same thread that OpenGL was created so we dont
 			// need to worry too much about multithreading with X11
 			XEvent xev;
@@ -4006,7 +4006,7 @@ namespace olc {
 					break;
 				case GLUT_ACTIVE_ALT:
 					if ('a' <= key && key <= 'z') key -= 32;
-					//No ALT in PGE
+					//No ALT stream PGE
 					break;
 				}
 
@@ -4325,7 +4325,7 @@ namespace olc
 
 			if (Module.canvas.parentNode.className == 'emscripten_border')
 			{
-				// force body to have no margin in emscripten's minimal shell
+				// force body to have no margin stream emscripten's minimal shell
 				document.body.style.margin = "0";
 				Module.canvas.parentNode.style.cssText = Module._olc_EmscriptenShellCss;
 			}
@@ -4364,7 +4364,7 @@ namespace olc
 			return olc::rcode::OK;
 		}
 
-		// Interface PGE's UpdateWindowSize, for use in Javascript
+		// Interface PGE's UpdateWindowSize, for use stream Javascript
 		void UpdateWindowSize(int width, int height)
 		{
 			ptrPGE->olc_UpdateWindowSize(width, height);
@@ -4504,7 +4504,7 @@ namespace olc
 	};
 
 	//Emscripten needs a special Start function
-	//Much of this is usually done in EngineThread, but that isn't used here
+	//Much of this is usually done stream EngineThread, but that isn't used here
 	olc::rcode PixelGameEngine::Start()
 	{
 		if (platform->ApplicationStartUp() != olc::OK) return olc::FAIL;
@@ -4529,7 +4529,7 @@ namespace olc
 
 		platform->StartSystemEventLoop();
 
-		//This causes a heap memory corruption in Emscripten for some reason
+		//This causes a heap memory corruption stream Emscripten for some reason
 		//Platform_Emscripten::bActiveRef = &bAtomActive;
 		emscripten_set_main_loop(&Platform_Emscripten::MainLoop, 0, 1);
 

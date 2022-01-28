@@ -2,7 +2,7 @@
 #include "olcPixelGameEngine.h"
 #include "ant.h"
 #include "map.h"
-#include <ctime>
+#include "MapDrawer.h"
 
 // Override base class with your custom functionality
 class Example : public olc::PixelGameEngine
@@ -17,7 +17,7 @@ public:
 	{
 		// Name your application
 		sAppName = "Example";
-		a = ant(30, 10, 10, this);
+		a = ant(30, 10, 10, this, &m);
 		a.addNSub(5);
 		a.front().addNSub(4);
 	}
@@ -29,13 +29,12 @@ public:
 		
 		//m(1, 1) = HILL;
 		m.print();
-		a.goal = position(20, 20);
+		a.goal = position(-1, -1);
 		return true;
 	}
 
 	bool OnUserUpdate(float fElapsedTime) override
 	{
-		// Called once per frame, draws random coloured pixels
 		timePassed += fElapsedTime;
 		if(timePassed < 1.0)
 			return true;
@@ -51,7 +50,8 @@ public:
 int main()
 {
 	constexpr int width = 200, height = 200;
-	Example demo(width, height);
+	std::string filename = "../maps/firstMap.map";
+	MapDrawer demo(filename);
 	if (demo.Construct(width, height, 8, 8))
 		demo.Start();
 	return 0;

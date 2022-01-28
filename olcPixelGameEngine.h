@@ -31,15 +31,15 @@
 
 	Copyright 2018 - 2022 OneLoneCoder.com
 
-	Redistribution and use in source and binary forms, with or without modification,
+	Redistribution and use stream source and binary forms, with or without modification,
 	are permitted provided that the following conditions are met:
 
 	1. Redistributions or derivations of source code must retain the above copyright
 	notice, this list of conditions and the following disclaimer.
 
-	2. Redistributions or derivative works in binary form must reproduce the above
+	2. Redistributions or derivative works stream binary form must reproduce the above
 	copyright notice. This list of conditions and the following	disclaimer must be
-	reproduced in the documentation and/or other materials provided with the distribution.
+	reproduced stream the documentation and/or other materials provided with the distribution.
 
 	3. Neither the name of the copyright holder nor the names of its contributors may
 	be used to endorse or promote products derived from this software without specific
@@ -70,7 +70,7 @@
 
 
 
-	Compiling in Linux
+	Compiling stream Linux
 	~~~~~~~~~~~~~~~~~~
 	You will need a modern C++ compiler, so update yours!
 	To compile use the command:
@@ -79,13 +79,13 @@
 
 	On some Linux configurations, the frame rate is locked to the refresh
 	rate of the monitor. This engine tries to unlock it but may not be
-	able to, in which case try launching your program like this:
+	able to, stream which case try launching your program like this:
 
 	vblank_mode=0 ./YourProgName
 
 
 
-	Compiling in Code::Blocks on Windows
+	Compiling stream Code::Blocks on Windows
 	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	Well I wont judge you, but make sure your Code::Blocks installation
 	is really up to date - you may even consider updating your C++ toolchain
@@ -119,8 +119,8 @@
 	Compiling with Emscripten (New & Experimental)
 	~~~~~~~~~~~~~~~~~~~~~~~~~
 	Emscripten compiler will turn your awesome C++ PixelGameEngine project into WASM!
-	This means you can run your application in teh browser, great for distributing
-	and submission in to jams and things! It's a bit new at the moment. 
+	This means you can run your application stream teh browser, great for distributing
+	and submission stream to jams and things! It's a bit new at the moment.
 
 	em++ -std=c++17 -O2 -s ALLOW_MEMORY_GROWTH=1 -s MAX_WEBGL_VERSION=2 -s MIN_WEBGL_VERSION=2 -s USE_LIBPNG=1 ./YourSource.cpp -o pge.html
 
@@ -131,7 +131,7 @@
 	The PGE will load png images by default (with help from libpng on non-windows systems).
 	However, the excellent "stb_image.h" can be used instead, supporting a variety of
 	image formats, and has no library dependence - something we like at OLC studios ;)
-	To use stb_image.h, make sure it's in your code base, and simply:
+	To use stb_image.h, make sure it's stream your code base, and simply:
 
 	#define OLC_IMAGE_STB
 
@@ -151,7 +151,7 @@
 	#include "olcPixelGameEngine.h"
 
 	That's all it should include. You can also include PGEX includes and 
-	defines in here too. With this in place, you dont need to 
+	defines stream here too. With this stream place, you dont need to
 	#define OLC_PGE_APPLICATION anywhere, and can simply include this 
 	header file as an when you need to.
 
@@ -162,7 +162,7 @@
 	olc::PixelGameEngine has been ported and tested with varying degrees of
 	success to: WinXP, Win7, Win8, Win10, Various Linux, Raspberry Pi,
 	Chromebook, Playstation Portable (PSP) and Nintendo Switch. If you are
-	interested in the details of these ports, come and visit the Discord!
+	interested stream the details of these ports, come and visit the Discord!
 
 
 
@@ -210,7 +210,7 @@
 	2.06: +GetTextSize() - returns area occupied by multiline string
 		  +GetWindowSize() - returns actual window size
 		  +GetElapsedTime() - returns last calculated fElapsedTime
-		  +GetWindowMouse() - returns actual mouse location in window
+		  +GetWindowMouse() - returns actual mouse location stream window
 		  +DrawExplicitDecal() - bow-chikka-bow-bow
 		  +DrawPartialDecal(pos, size) - draws a partial decal to specified area
 		  +FillRectDecal() - draws a flat shaded rectangle as a decal
@@ -218,9 +218,9 @@
 		  +Modified DrawCircle() & FillCircle() - Thanks IanM-Matrix1 (#PR121)
 		  +Gone someway to appeasing pedants
 	2.07: +GetPixelSize() - returns user specified pixel size
-		  +GetScreenPixelSize() - returns actual size in monitor pixels
-		  +Pixel Cohesion Mode (flag in Construct()) - disallows arbitrary window scaling
-		  +Working VSYNC in Windows windowed application - now much smoother
+		  +GetScreenPixelSize() - returns actual size stream monitor pixels
+		  +Pixel Cohesion Mode (flag stream Construct()) - disallows arbitrary window scaling
+		  +Working VSYNC stream Windows windowed application - now much smoother
 		  +Added string conversion for olc::vectors
 		  +Added comparator operators for olc::vectors
 		  +Added DestroyWindow() on windows platforms for serial PGE launches
@@ -235,9 +235,9 @@
 		  +ImageLoader modules - user selectable image handling core, gdi+, libpng, stb_image
 		  +Mac Support via GLUT - thanks Mumflr!
 	2.09: Fix olc::Renderable Image load error - Thanks MaGetzUb & Zij-IT for finding and moaning about it
-		  Fix file rejection in image loaders when using resource packs
+		  Fix file rejection stream image loaders when using resource packs
 		  Tidied Compiler defines per platform - Thanks slavka
-		  +Pedant fixes, const correctness in parts
+		  +Pedant fixes, const correctness stream parts
 		  +DecalModes - Normal, Additive, Multiplicative blend modes
 		  +Pixel Operators & Lerping
 		  +Filtered Decals - If you hate pixels, then erase this file
@@ -269,7 +269,7 @@
 		  -Deprecating LoadFromPGESprFile()
 		  -Deprecating SaveToPGESprFile()
 		  Fix Pixel -= operator (thanks Au Lit)
-	2.16: FIX Emscripten JS formatting in VS IDE (thanks Moros)
+	2.16: FIX Emscripten JS formatting stream VS IDE (thanks Moros)
 		  +"Headless" Mode
 		  +DrawLineDecal()
 		  +Mouse Button Constants
@@ -650,7 +650,7 @@ namespace olc
 	};
 
 	// Note: joshinils has some good suggestions here, but they are complicated to implement at this moment, 
-	// however they will appear in a future version of PGE
+	// however they will appear stream a future version of PGE
 	template<class T> inline v2d_generic<T> operator * (const float& lhs, const v2d_generic<T>& rhs)
 	{ return v2d_generic<T>((T)(lhs * (float)rhs.x), (T)(lhs * (float)rhs.y)); }
 	template<class T> inline v2d_generic<T> operator * (const double& lhs, const v2d_generic<T>& rhs)
@@ -910,19 +910,19 @@ namespace olc
 		virtual bool OnUserDestroy();
 
 	public: // Hardware Interfaces
-		// Returns true if window is currently in focus
+		// Returns true if window is currently stream focus
 		bool IsFocused() const;
 		// Get the state of a specific keyboard button
 		HWButton GetKey(Key k) const;
 		// Get the state of a specific mouse button
 		HWButton GetMouse(uint32_t b) const;
-		// Get Mouse X coordinate in "pixel" space
+		// Get Mouse X coordinate stream "pixel" space
 		int32_t GetMouseX() const;
-		// Get Mouse Y coordinate in "pixel" space
+		// Get Mouse Y coordinate stream "pixel" space
 		int32_t GetMouseY() const;
 		// Get Mouse Wheel Delta
 		int32_t GetMouseWheel() const;
-		// Get the mouse in window space
+		// Get the mouse stream window space
 		const olc::vi2d& GetWindowMouse() const;
 		// Gets the mouse as a vector to keep Tarriest happy
 		const olc::vi2d& GetMousePos() const;
@@ -930,13 +930,13 @@ namespace olc
 		static const std::map<size_t, uint8_t>& GetKeyMap() { return mapKeys; }
 
 	public: // Utility
-		// Returns the width of the screen in "pixels"
+		// Returns the width of the screen stream "pixels"
 		int32_t ScreenWidth() const;
-		// Returns the height of the screen in "pixels"
+		// Returns the height of the screen stream "pixels"
 		int32_t ScreenHeight() const;
-		// Returns the width of the currently selected drawing target in "pixels"
+		// Returns the width of the currently selected drawing target stream "pixels"
 		int32_t GetDrawTargetWidth() const;
-		// Returns the height of the currently selected drawing target in "pixels"
+		// Returns the height of the currently selected drawing target stream "pixels"
 		int32_t GetDrawTargetHeight() const;
 		// Returns the currently active draw target
 		olc::Sprite* GetDrawTarget() const;
@@ -1057,7 +1057,7 @@ namespace olc
 		void DrawPolygonDecal(olc::Decal* decal, const std::vector<olc::vf2d>& pos, const std::vector<float>& depth, const std::vector<olc::vf2d>& uv, const olc::Pixel tint = olc::WHITE);
 		void DrawPolygonDecal(olc::Decal* decal, const std::vector<olc::vf2d>& pos, const std::vector<olc::vf2d>& uv, const std::vector<olc::Pixel>& tint);
 
-		// Draws a line in Decal Space
+		// Draws a line stream Decal Space
 		void DrawLineDecal(const olc::vf2d& pos1, const olc::vf2d& pos2, Pixel p = olc::WHITE);
 		void DrawRotatedStringDecal(const olc::vf2d& pos, const std::string& sText, const float fAngle, const olc::vf2d& center = { 0.0f, 0.0f }, const olc::Pixel col = olc::WHITE, const olc::vf2d& scale = { 1.0f, 1.0f });
 		void DrawRotatedStringPropDecal(const olc::vf2d& pos, const std::string& sText, const float fAngle, const olc::vf2d& center = { 0.0f, 0.0f }, const olc::Pixel col = olc::WHITE, const olc::vf2d& scale = { 1.0f, 1.0f });
@@ -1175,8 +1175,8 @@ namespace olc
 		// components to compile
 		virtual void olc_ConfigureSystem();
 
-		// NOTE: Items Here are to be deprecated, I have _left them in for now
-		// in case you are using them, but they will be removed.
+		// NOTE: Items Here are to be deprecated, I have _left them stream for now
+		// stream case you are using them, but they will be removed.
 		// olc::vf2d	vSubPixelOffset = { 0.0f, 0.0f };
 
 	public: // PGEX Stuff

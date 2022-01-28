@@ -6,20 +6,19 @@
 #include "ant.h"
 #include "olcPixelGameEngine.h"
 
-enum land { PLAIN, HILL, WATER, TOTAL_LAND };
+enum land { PLAIN, HILL, WATER, BLACK, TOTAL_LAND };
 
 class map {
 private:
 	std::vector<land> array;
-	//std::shared_ptr<olc::PixelGameEngine> pge;
 	olc::PixelGameEngine* pge;
 
 public:
 	unsigned rows, cols;
 
+	map() = default;
 	map(unsigned _cols, unsigned _rows, olc::PixelGameEngine* _pge): rows(_rows), cols(_cols) {
 		array = std::vector<land>(rows * cols);
-		// pge = std::shared_ptr<olc::PixelGameEngine> (_pge, [](olc::PixelGameEngine* p){});
 		pge = _pge;
 		for (auto& i : array)
 			i = PLAIN;
@@ -46,6 +45,18 @@ public:
 			}
 	}
 
+	bool crossable(int x, int y) {
+		land l;
+		try {
+			l = operator()(x, y);
+		}
+		catch(const std::out_of_range& _) { // We're out of bound,
+			return false; // so it is not crossable.
+		}
 
-
-}; 
+		switch (l) {
+			case WATER: return false;
+			default: return true;
+		}
+	}
+};

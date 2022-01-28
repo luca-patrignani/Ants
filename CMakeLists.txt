@@ -3,6 +3,6 @@ project(provaCLion)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(provaCLion olcPixelGameEngine.h ant.h map.h main.cpp olcPixelGameEngine.cpp direction.h)
+add_executable(provaCLion olcPixelGameEngine.h ant.h map.h main.cpp olcPixelGameEngine.cpp direction.h MapDrawer.h)
 target_link_libraries(provaCLion user32 gdi32 opengl32 gdiplus Shlwapi dwmapi stdc++fs)
 

@@ -3,6 +3,8 @@
 #include <list>
 #include "olcPixelGameEngine.h"
 #include "direction.h"
+#include "map.h"
+#include "olcPixelGameEngine.h"
 
 typedef olc::vi2d position;
 const position NULLPOS = position(-1, -1);
@@ -13,16 +15,16 @@ public:
 	position goal;
 	unsigned life;
 	bool ifCarryFood;
-	bool alreadyMoved; // TODO: We'll see if it is needed
 	std::list<ant> sub;
 	olc::PixelGameEngine* pge;
+	map* m;
 
 public:
-	ant() {}
+	ant() = default;
 	/*
 	Construct the ant
 	*/
-	ant(int _x, int _y, unsigned _life, olc::PixelGameEngine* _pge);
+	ant(int _x, int _y, unsigned _life, olc::PixelGameEngine* _pge, map* _m);
 
 	/*
 	Move the ant "a" according to direction "dir",
@@ -30,10 +32,10 @@ public:
 	*/
 	bool move(direction dir);
 
-	/* Add a new  subordinate ant in position x, y
+	/* Add a new  subordinate ant stream position x, y
 	*/
 	void addSub(unsigned _x, unsigned _y, unsigned _life) {
-		sub.emplace_back(ant(_x, _y, _life, pge));
+		sub.emplace_back(ant(_x, _y, _life, pge, m));
 	}
 
 	/* Search an ant according to its position among ant's subordinate and itself.
@@ -75,52 +77,16 @@ public:
 	}
 
 	void setGoal(const position& _goal) { goal = _goal; }
-/*
-	void moveToGoal() {
-		int x = pos.x, y = pos.y;
-		int gx = goal.x, gy = goal.y;
-		direction d;
-		if(x < gx) {
-			if(y < gy)
-				d = DOWN_RIGHT;
-			else
-				if(y == gy)
-					d = RIGHT;
-				else
-					d = UP_RIGHT;
-		}
-		else if(x == gx) {
-			if(y < gy)
-				d = DOWN;
-			else
-			if(y == gy)
-				d = NO_MOVE;
-			else
-				d = UP;
-		}
-		else {
-			if(y < gy)
-				d = DOWN_LEFT;
-			else
-			if(y == gy)
-				d = LEFT;
-			else
-				d = UP_LEFT;
-		}
 
-		//if(move(d))
-
-	}
-*/
-	bool moveToGoal() {
+	bool moveToGoal() { // TODO: TESTING
 		if(pos == goal)
 			return true;
 
 		// the vector which connects the current position and the goal
-		auto p0p = goal - pos;
+		auto p0_p = goal - pos;
 
 		// Prime solution
-		direction movement = vectToDirection(p0p.x, p0p.y);
+		direction movement = vectToDirection(p0_p.x, p0_p.y);
 		if(move(movement))
 			return true;
 
@@ -141,12 +107,19 @@ public:
 		return false;
 	}
 
+	/*Look into the map to the direction "d"
+	 * Returns the land.
+	 * */
+	 land look(direction d) {
+		position wereLookingTo = pos + directionToVect(d);
+		auto l = m->operator()(wereLookingTo.x, wereLookingTo.y);
+		return l;
+	}
 };
 
 
 
-ant::ant(int _x, int _y, unsigned _life, olc::PixelGameEngine* _pge): pos(_x, _y), life(_life), pge(_pge) {
-	alreadyMoved = false;
+ant::ant(int _x, int _y, unsigned _life, olc::PixelGameEngine* _pge, map* _m): pos(_x, _y), life(_life), pge(_pge), m(_m) {
 	ifCarryFood = false;
 	sub = std::list<ant>();
 	goal = NULLPOS;
@@ -154,27 +127,27 @@ ant::ant(int _x, int _y, unsigned _life, olc::PixelGameEngine* _pge): pos(_x, _y
 
 
 bool ant::move(direction dir) {
-	int _y = (int)pos.y, _x = (int)pos.x;
+	int y = pos.y, x = pos.x;
 	switch (dir) {
-		case UP_LEFT: --_y; --_x; break;
-		case UP: --_y; break;
-		case UP_RIGHT: --_y; ++_x; break;
+		case UP_LEFT: --y; --x; break;
+		case UP: --y; break;
+		case UP_RIGHT: --y; ++x; break;
 
-		case LEFT: --_x; break;
-		case RIGHT: ++_x; break;
+		case LEFT: --x; break;
+		case RIGHT: ++x; break;
 
-		case DOWN_LEFT: ++_y; --_x; break;
-		case DOWN: ++_y; break;
-		case DOWN_RIGHT: ++_y; ++_x; break;
+		case DOWN_LEFT: ++y; --x; break;
+		case DOWN: ++y; break;
+		case DOWN_RIGHT: ++y; ++x; break;
 
 		default: return false;
 	}
 
-	if (_y < 0 || _x < 0) // TODO: More checks are needed
+	if (!m->crossable(x, y)) // if that piece of land is not crossable
 		return false;
 	else {
-		pos.y = _y;
-		pos.x = _x;
+		pos.y = y;
+		pos.x = x;
 		return true;
 	}
 }
