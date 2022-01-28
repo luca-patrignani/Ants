@@ -34,87 +34,29 @@ public:
 
 	/* Add a new  subordinate ant stream position x, y
 	*/
-	void addSub(unsigned _x, unsigned _y, unsigned _life) {
-		sub.emplace_back(ant(_x, _y, _life, pge, m));
-	}
+	void addSub(unsigned _x, unsigned _y, unsigned _life);
 
 	/* Search an ant according to its position among ant's subordinate and itself.
 	 * Returns the pointer to the ant found, nullptr if not found,
 	 */
-	ant* searchSub(position _pos, ant* a = nullptr) {
-		if(a == nullptr)
-			a = this;
+	ant* searchSub(position _pos, ant* a = nullptr);
 
-		// If the ant a is the ant, return it
-		if(pos == _pos)
-			return a;
+	/* Add "n" subordinates
+	 * */
+	void addNSub(unsigned n);
 
-		// Else search it within its subordinate.
-		for(auto& i: a->sub) {
-			ant* newAnt = searchSub(_pos, &i);
-			if (newAnt != nullptr)
-				return newAnt;
-		}
-		return nullptr;
-	}
+	ant& front() { return sub.front(); }
 
-	void addNSub(unsigned n) {
-		auto _x = pos.x + 1;
-		auto _y = pos.y;
-		for(unsigned i = 0; i < n; ++i)
-			addSub(_x, _y++, life);
-	}
-
-	ant& front() {
-		return sub.front();
-	}
-
-	void print(bool subToo = true) {
-		pge->Draw(pos, olc::BLACK);
-		if(subToo)
-			for(auto i: sub)
-				i.print(true);
-	}
+	void print(bool subToo = true);
 
 	void setGoal(const position& _goal) { goal = _goal; }
 
-	bool moveToGoal() { // TODO: TESTING
-		if(pos == goal)
-			return true;
-
-		// the vector which connects the current position and the goal
-		auto p0_p = goal - pos;
-
-		// Prime solution
-		direction movement = vectToDirection(p0_p.x, p0_p.y);
-		if(move(movement))
-			return true;
-
-		// Complementary solution
-		auto cd = complementaryDirections(movement);
-		direction newMovement;
-		do {
-			newMovement = cd.next();
-			if(move(newMovement))
-				return true;
-		} while(newMovement != NO_MOVE);
-
-		// Opposite solution
-		if(move(!movement))
-			return true;
-
-		// If we can do nothing do not move and return false
-		return false;
-	}
+	bool moveToGoal();
 
 	/*Look into the map to the direction "d"
 	 * Returns the land.
 	 * */
-	 land look(direction d) {
-		position wereLookingTo = pos + directionToVect(d);
-		auto l = m->operator()(wereLookingTo.x, wereLookingTo.y);
-		return l;
-	}
+	 land look(direction d);
 };
 
 
@@ -152,6 +94,75 @@ bool ant::move(direction dir) {
 	}
 }
 
+void ant::addSub(unsigned _x, unsigned _y, unsigned _life) {
+	sub.emplace_back(ant(_x, _y, _life, pge, m));
+}
+
+ant *ant::searchSub(position _pos, ant *a) {
+	if(a == nullptr)
+		a = this;
+
+	// If the ant a is the ant, return it
+	if(pos == _pos)
+		return a;
+
+	// Else search it within its subordinate.
+	for(auto& i: a->sub) {
+		ant* newAnt = searchSub(_pos, &i);
+		if (newAnt != nullptr)
+			return newAnt;
+	}
+	return nullptr;
+}
+
+bool ant::moveToGoal() { // TODO: TESTING
+	if(pos == goal)
+		return true;
+
+	// the vector which connects the current position and the goal
+	auto p0_p = goal - pos;
+
+	// Prime solution
+	direction movement = vectToDirection(p0_p.x, p0_p.y);
+	if(move(movement))
+		return true;
+
+	// Complementary solution
+	auto cd = complementaryDirections(movement);
+	direction newMovement;
+	do {
+		newMovement = cd.next();
+		if(move(newMovement))
+			return true;
+	} while(newMovement != NO_MOVE);
+
+	// Opposite solution
+	if(move(!movement))
+		return true;
+
+	// If we can do nothing do not move and return false
+	return false;
+}
+
+land ant::look(direction d) {
+	position wereLookingTo = pos + directionToVect(d);
+	auto l = m->operator()(wereLookingTo.x, wereLookingTo.y);
+	return l;
+}
+
+void ant::addNSub(unsigned int n) {
+	auto _x = pos.x + 1;
+	auto _y = pos.y;
+	for(unsigned i = 0; i < n; ++i)
+		addSub(_x, _y++, life);
+}
+
+void ant::print(bool subToo) {
+	pge->Draw(pos, olc::BLACK);
+	if(subToo)
+		for(auto i: sub)
+			i.print(true);
+}
 
 
 
