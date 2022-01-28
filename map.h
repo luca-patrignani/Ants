@@ -13,15 +13,40 @@ private:
 	std::vector<land> array;
 	olc::PixelGameEngine* pge;
 
-public:
-	unsigned rows, cols;
-
-	map() = default;
-	map(unsigned _cols, unsigned _rows, olc::PixelGameEngine* _pge): rows(_rows), cols(_cols) {
+	void init(int _cols, int _rows, olc::PixelGameEngine* _pge) {
+		cols = _cols;
+		rows = _rows;
 		array = std::vector<land>(rows * cols);
 		pge = _pge;
+	}
+
+public:
+	int rows, cols;
+
+	map() = default;
+	map(int _cols, int _rows, olc::PixelGameEngine* _pge) {
+		init(_cols, _rows, _pge);
 		for (auto& i : array)
 			i = PLAIN;
+	}
+
+	explicit map(const std::string& filename, olc::PixelGameEngine* _pge) {
+		auto stream = std::fstream(filename, std::fstream::in);
+		int _cols, _rows;
+		stream >> _cols >> _rows;
+		init(_cols, _rows, _pge);
+		for(auto &i: array) {
+			int l;
+			stream >> l;
+			i = (land)l;
+		}
+	}
+
+	void save(const std::string& outPath) {
+		auto stream = std::fstream(outPath, std::fstream::out);
+		stream << cols << " " << rows;
+		for(auto& i: array)
+			stream << " " << (int)i;
 	}
 
 	land& operator()(unsigned x, unsigned y) {

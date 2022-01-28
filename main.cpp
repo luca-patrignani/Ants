@@ -29,7 +29,7 @@ public:
 		
 		//m(1, 1) = HILL;
 		m.print();
-		a.goal = position(-1, -1);
+		a.goal = position(100, 100);
 		return true;
 	}
 
@@ -51,7 +51,9 @@ int main()
 {
 	constexpr int width = 200, height = 200;
 	std::string filename = "../maps/firstMap.map";
-	MapDrawer demo(filename);
+	// MapDrawer demo(filename);
+	Example demo(width, height);
+	demo.m = map(filename, &demo);
 	if (demo.Construct(width, height, 8, 8))
 		demo.Start();
 	return 0;
