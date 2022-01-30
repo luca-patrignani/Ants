@@ -21,11 +21,10 @@ public:
 	{
 		// Name your application
 		sAppName = "Example";
-		a = ant(50, 10, 10, this, &m, position(100, 20));
+		a = ant(50, 10, 10, this, &m);
 		a.addNSub(5);
-		int x = a.goal.x;
-		for(auto& i: a.sub)
-			i.goal = position(x += 5, a.goal.y);
+		a.front().addNSub(4);
+		ih = inputHandler(&a);
 	}
 
 public:
@@ -35,6 +34,7 @@ public:
 				{-1, 0},                {1, 0},
 				{-1, 1},  {0, 1},  {1, 1}
 		};
+		//static const auto d = olc::Decal();
 		for(const auto& v: positionsAround)
 			Draw(pos + v, color);
 	}
@@ -50,27 +50,30 @@ public:
 
 	bool OnUserUpdate(float fElapsedTime) override
 	{
+		/* Input handling */
+		if(GetMouse(olc::Mouse::RIGHT).bPressed)
+			ih.singleSelection(GetMouseX(), GetMouseY());
+		if(GetMouse(olc::Mouse::LEFT).bPressed)
+			ih.subSelection(ih.selectAnt(GetMouseX(), GetMouseY()), !GetKey(olc::CTRL).bHeld);
+		if(GetKey(olc::G).bPressed)
+			ih.setGoal(GetMouseX(), GetMouseY(), [](int& x){x += 5;});
+		if(GetKey(olc::DEL).bPressed)
+			ih.deselectAll();
 
 		timePassed += fElapsedTime;
-		if(timePassed < 0.13)
-			return true;
-		timePassed = 0.0;
+		if(timePassed >= 0.08) {
+			timePassed = 0.0;
 
-		/* Input handling */
-		if(GetMouse(olc::Mouse::RIGHT).bHeld)
-			ih.singleSelection(GetMouseX(), GetMouseY());
-		if(GetMouse(olc::Mouse::LEFT).bHeld)
-			ih.subSelection(ih.selectAnt(GetMouseX(), GetMouseY()), !GetKey(olc::CTRL).bHeld);
+			/* Move phase */
+			a.moveToGoal(true);
 
-
-		/* Print phase */
-		m.print();
-		//Draw(a.goal, olc::RED);
-		for(auto _a: ih.getSelectedAnts())
-			paintAround(_a->pos, olc::DARK_YELLOW);
-		a.moveToGoal(true);
-		a.print(true);
-
+			/* Print phase */
+			m.print();
+			//Draw(a.goal, olc::RED);
+			for (auto i = ih.getSelectedAntsBegin(); i != ih.getSelectedAntsEnd(); ++i)
+				paintAround((*i)->pos, olc::DARK_YELLOW);
+			a.print(true);
+		}
 		return true;
 	}
 };

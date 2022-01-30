@@ -4,7 +4,7 @@
 #include "ant.h"
 #include "map.h"
 #include <set>
-#include <utility>
+#include <algorithm>
 
 class inputHandler {
 private:
@@ -12,10 +12,10 @@ private:
 	ant* a;
 	std::set<ant*> selectedAnts;
 public:
-	const std::set<ant*> &getSelectedAnts() const;
+	std::_Rb_tree_const_iterator<ant *> getSelectedAntsBegin();
+	std::_Rb_tree_const_iterator<ant *> getSelectedAntsEnd();
 
 private:
-
 	void selectionAndRemoval(ant* s) {
 		if(s != nullptr) {
 			if (selectedAnts.contains(s))
@@ -24,6 +24,9 @@ private:
 				selectedAnts.insert(s);
 		}
 	}
+
+
+
 public:
 	//inputHandler(ant a, map m) : a(std::move(a)), m(std::move(m)) {}
 
@@ -39,18 +42,35 @@ public:
 	void subSelection(ant* chief, bool chiefToo=false) {
 		if(chiefToo)
 			selectionAndRemoval(chief);
-		for(auto& i: chief->sub)
-			selectionAndRemoval(&i);
+		if(chief != nullptr)
+			for(auto& i: chief->sub)
+				selectionAndRemoval(&i);
 	}
 
 	void subSelectionChiefAnt(bool chiefToo=false) {
 		subSelection(a, chiefToo);
 	}
 
+	// Set the goal of the selectedAnt and if "subToo" set the subs' goal too.
+	void setGoal(int goalX, int goalY, const std::function<void(int&)>& f=[](int&) {}) {
+		for(auto i: selectedAnts) {
+			i->goal = {goalX, goalY};
+			f(goalX);
+		}
+	}
+
+	void deselectAll() {
+		selectedAnts.clear();
+	}
 };
 
-const std::set<ant*>& inputHandler::getSelectedAnts() const {
-	return selectedAnts;
+std::_Rb_tree_const_iterator<ant *> inputHandler::getSelectedAntsBegin() {
+	return selectedAnts.cbegin();
+}
+
+
+std::_Rb_tree_const_iterator<ant *> inputHandler::getSelectedAntsEnd() {
+	return selectedAnts.cend();
 }
 
 

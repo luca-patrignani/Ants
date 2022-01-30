@@ -26,7 +26,7 @@ public:
 	/*
 	Construct the ant
 	*/
-	ant(int _x, int _y, unsigned _life, olc::PixelGameEngine* _pge, map* _m, position _goal);
+	ant(int _x, int _y, unsigned _life, olc::PixelGameEngine* _pge, map* _m, const position& _goal);
 
 	/*
 	Move the ant "a" according to direction "dir",
@@ -36,7 +36,7 @@ public:
 
 	/* Add a new  subordinate ant stream position x, y
 	*/
-	void addSub(unsigned _x, unsigned _y, unsigned _life, position _goal);
+	void addSub(unsigned _x, unsigned _y, unsigned _life);
 
 	/* Search an ant according to its position among ant's subordinate and itself.
 	 * Returns the pointer to the ant found, nullptr if not found,
@@ -63,11 +63,14 @@ public:
 
 
 
-ant::ant(int _x, int _y, unsigned _life, olc::PixelGameEngine* _pge, map* _m, position _goal = NULLPOS):
+ant::ant(int _x, int _y, unsigned _life, olc::PixelGameEngine* _pge, map* _m, const position& _goal = NULLPOS):
 	pos(_x, _y), life(_life), pge(_pge), m(_m) {
 	ifCarryFood = false;
 	sub = std::list<ant>();
-	goal = _goal;
+	if(_goal == NULLPOS)
+		goal = pos;
+	else
+		goal = _goal;
 }
 
 
@@ -97,8 +100,8 @@ bool ant::move(direction dir) {
 	}
 }
 
-void ant::addSub(unsigned _x, unsigned _y, unsigned _life, position _goal) {
-	sub.emplace_back(ant(_x, _y, _life, pge, m, _goal));
+void ant::addSub(unsigned _x, unsigned _y, unsigned _life) {
+	sub.emplace_back(ant(_x, _y, _life, pge, m));
 }
 
 ant *ant::searchSub(position _pos, ant* a) {
@@ -235,7 +238,7 @@ void ant::addNSub(unsigned int n) {
 	auto _x = pos.x + 1;
 	auto _y = pos.y;
 	for(unsigned i = 0; i < n; ++i)
-		addSub(_x, _y++, life, goal + position (8, 0));
+		addSub(_x, _y++, life);
 }
 
 void ant::print(bool subToo) {
