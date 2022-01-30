@@ -62,13 +62,13 @@ build cmake_object_order_depends_target_provaCLion: phony || CMakeFiles/provaCLi
 
 build CMakeFiles/provaCLion.dir/main.cpp.obj: CXX_COMPILER__provaCLion_Debug C$:/Users/Luca/CLionProjects/provaCLion/main.cpp || cmake_object_order_depends_target_provaCLion
   DEP_FILE = CMakeFiles\provaCLion.dir\main.cpp.obj.d
-  FLAGS = -g -std=gnu++17
+  FLAGS = -g -std=gnu++20
   OBJECT_DIR = CMakeFiles\provaCLion.dir
   OBJECT_FILE_DIR = CMakeFiles\provaCLion.dir
 
 build CMakeFiles/provaCLion.dir/olcPixelGameEngine.cpp.obj: CXX_COMPILER__provaCLion_Debug C$:/Users/Luca/CLionProjects/provaCLion/olcPixelGameEngine.cpp || cmake_object_order_depends_target_provaCLion
   DEP_FILE = CMakeFiles\provaCLion.dir\olcPixelGameEngine.cpp.obj.d
-  FLAGS = -g -std=gnu++17
+  FLAGS = -g -std=gnu++20
   OBJECT_DIR = CMakeFiles\provaCLion.dir
   OBJECT_FILE_DIR = CMakeFiles\provaCLion.dir
 

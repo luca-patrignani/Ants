@@ -3,6 +3,7 @@
 //
 
 #include "../direction.h"
+#include "../ant.h"
 #include <iostream>
 
 std::string printDirection(const direction d) {
@@ -36,10 +37,21 @@ void testDirToVec(direction d) {
 	std::cout << "End of " << __FUNCTION__ << " for " << d << std::endl;
 }
 
-int main() {
-	for(auto a = FIRST_REGULAR_DIRECTION; a < TOTAL_REGULAR_DIRECTIONS; a = static_cast<direction>((direction) a + 1)) {
-		testDirToVec(a);
+void printAnt(ant a, char t = 1) {
+	std::cout << t << a.pos << std::endl;
+	for(auto i: a.sub) {
+		//std::cout << "\t";
+		printAnt(i, '\t');
 	}
-	testDirToVec(NO_MOVE);
+}
+
+
+
+int main() {
+	ant a = ant(10, 10, 10, nullptr, nullptr);
+	a.addNSub(10);
+	a.front().addNSub(5);
+	a.front().front().addNSub(4);
+	std::cout << a.searchSub({11, 10})->pos;
 	return 0;
 }

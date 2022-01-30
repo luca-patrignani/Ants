@@ -10,14 +10,14 @@
 #include <ctime>
 #include "olcPixelGameEngine.h"
 
-typedef enum {
+enum direction {
 	UP_LEFT, UP, UP_RIGHT, RIGHT, DOWN_RIGHT, DOWN, DOWN_LEFT, LEFT,
 	TOTAL_REGULAR_DIRECTIONS,
 	FIRST_REGULAR_DIRECTION = UP_LEFT,
 	LAST_REGULAR_DIRECTION = LEFT,
 	NO_MOVE,
 	INVALID
-} direction;
+};
 
 
 // Opposite direction
@@ -57,6 +57,13 @@ direction vectToDirection(int x, int y) {
 		else // if(x > 0)
 			return DOWN_RIGHT;
 	}
+
+	if(y == 0) {
+		if(x > 0)
+			return RIGHT;
+		else
+			return LEFT;
+	}
 	return NO_MOVE;
 }
 
@@ -82,7 +89,11 @@ class complementaryDirections {
 private:
 	direction _right;
 	direction _left;
-	bool rightOrLeft; // right -> true, left -> false
+	bool rightOrLeft;
+
+
+private:
+	// right -> true, left -> false
 	bool firstOrSecond; // first -> true, second -> false
 	static const bool FIRST = true, SECOND = false;
 
@@ -122,6 +133,13 @@ public:
 			rightOrLeft = (bool) (std::rand() % 2);
 			return r;
 		}
+	}
+
+	bool isRightOrLeft() const {
+		if(firstOrSecond == SECOND) // so we've just returned the first case with move()
+			return rightOrLeft;
+		else
+			return !rightOrLeft;
 	}
 
 };

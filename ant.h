@@ -13,6 +13,8 @@ class ant {
 public:
 	position pos;
 	position goal;
+	direction previous = DOWN;
+	bool rightOrLeft;
 	unsigned life;
 	bool ifCarryFood;
 	std::list<ant> sub;
@@ -24,7 +26,7 @@ public:
 	/*
 	Construct the ant
 	*/
-	ant(int _x, int _y, unsigned _life, olc::PixelGameEngine* _pge, map* _m);
+	ant(int _x, int _y, unsigned _life, olc::PixelGameEngine* _pge, map* _m, position _goal);
 
 	/*
 	Move the ant "a" according to direction "dir",
@@ -34,7 +36,7 @@ public:
 
 	/* Add a new  subordinate ant stream position x, y
 	*/
-	void addSub(unsigned _x, unsigned _y, unsigned _life);
+	void addSub(unsigned _x, unsigned _y, unsigned _life, position _goal);
 
 	/* Search an ant according to its position among ant's subordinate and itself.
 	 * Returns the pointer to the ant found, nullptr if not found,
@@ -51,7 +53,7 @@ public:
 
 	void setGoal(const position& _goal) { goal = _goal; }
 
-	bool moveToGoal();
+	bool moveToGoal(bool subToo);
 
 	/*Look into the map to the direction "d"
 	 * Returns the land.
@@ -61,10 +63,11 @@ public:
 
 
 
-ant::ant(int _x, int _y, unsigned _life, olc::PixelGameEngine* _pge, map* _m): pos(_x, _y), life(_life), pge(_pge), m(_m) {
+ant::ant(int _x, int _y, unsigned _life, olc::PixelGameEngine* _pge, map* _m, position _goal = NULLPOS):
+	pos(_x, _y), life(_life), pge(_pge), m(_m) {
 	ifCarryFood = false;
 	sub = std::list<ant>();
-	goal = NULLPOS;
+	goal = _goal;
 }
 
 
@@ -94,16 +97,16 @@ bool ant::move(direction dir) {
 	}
 }
 
-void ant::addSub(unsigned _x, unsigned _y, unsigned _life) {
-	sub.emplace_back(ant(_x, _y, _life, pge, m));
+void ant::addSub(unsigned _x, unsigned _y, unsigned _life, position _goal) {
+	sub.emplace_back(ant(_x, _y, _life, pge, m, _goal));
 }
 
-ant *ant::searchSub(position _pos, ant *a) {
+ant *ant::searchSub(position _pos, ant* a) {
 	if(a == nullptr)
 		a = this;
 
 	// If the ant a is the ant, return it
-	if(pos == _pos)
+	if(a->pos == _pos)
 		return a;
 
 	// Else search it within its subordinate.
@@ -115,34 +118,112 @@ ant *ant::searchSub(position _pos, ant *a) {
 	return nullptr;
 }
 
-bool ant::moveToGoal() { // TODO: TESTING
+// Dumb moving function
+bool ant::moveToGoal(bool subToo) {
+	if(subToo)
+		for(auto& s: sub)
+			s.moveToGoal(true);
+
 	if(pos == goal)
 		return true;
 
 	// the vector which connects the current position and the goal
 	auto p0_p = goal - pos;
 
+
 	// Prime solution
 	direction movement = vectToDirection(p0_p.x, p0_p.y);
-	if(move(movement))
+	if(move(movement)) {
+		previous = movement;
 		return true;
-
+	}
+/*
 	// Complementary solution
 	auto cd = complementaryDirections(movement);
 	direction newMovement;
 	do {
 		newMovement = cd.next();
-		if(move(newMovement))
+		if(!(newMovement % !previous) && move(newMovement)) {
+			previous = newMovement;
 			return true;
+		}
 	} while(newMovement != NO_MOVE);
 
 	// Opposite solution
-	if(move(!movement))
+	if(move(!movement)) {
+		previous = movement;
 		return true;
+	}
 
+	// Complementary solution with opposite direction
+	{
+		auto cd = complementaryDirections(!movement);
+		direction newMovement;
+		do {
+			newMovement = cd.next();
+			if (move(newMovement)) {
+				previous = newMovement;
+				return true;
+			}
+		} while (newMovement != NO_MOVE);
+	}
+*/
 	// If we can do nothing do not move and return false
 	return false;
 }
+
+/*
+bool ant::moveToGoal() {
+	if(pos == goal)
+		return true;
+
+	// Move to the goal
+	// the vector which connects the current position and the goal
+	auto p0_p = goal - pos;
+	// Prime solution
+	direction movement = vectToDirection(p0_p.x, p0_p.y);
+	if(move(movement)) {
+		previous = INVALID;
+		return true;
+	}
+
+	if(previous != INVALID) {
+		if(move(previous))
+			return true;
+		else {
+			auto newPrevious = previous;
+			do {
+				if(rightOrLeft)
+					newPrevious = right(newPrevious);
+				else
+					newPrevious = left(newPrevious);
+				if(move(newPrevious))
+					return true;
+			} while(previous != newPrevious);
+		}
+
+	}
+
+	// If an obstacle is encountered, choose a complementary direction e keep it.
+	auto cp = complementaryDirections(movement);
+	direction newDirection;
+
+	do {
+		newDirection = cp.next();
+		if(move(newDirection)) {
+			previous = newDirection;
+			rightOrLeft = cp.isRightOrLeft();
+			return true;
+		}
+	} while(newDirection != NO_MOVE);
+
+	if(move(!movement))
+		return true;
+	return false;
+
+		// If an obstacle is encountered, turn
+}
+*/
 
 land ant::look(direction d) {
 	position wereLookingTo = pos + directionToVect(d);
@@ -154,7 +235,7 @@ void ant::addNSub(unsigned int n) {
 	auto _x = pos.x + 1;
 	auto _y = pos.y;
 	for(unsigned i = 0; i < n; ++i)
-		addSub(_x, _y++, life);
+		addSub(_x, _y++, life, goal + position (8, 0));
 }
 
 void ant::print(bool subToo) {
