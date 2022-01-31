@@ -14,12 +14,11 @@ public:
 	position pos;
 	position goal;
 	direction previous = DOWN;
-	bool rightOrLeft;
-	unsigned life;
-	bool ifCarryFood;
+	unsigned life{};
+	bool ifCarryFood{};
 	std::list<ant> sub;
-	olc::PixelGameEngine* pge;
-	map* m;
+	olc::PixelGameEngine* pge{};
+	map* m{};
 
 public:
 	ant() = default;
@@ -49,7 +48,7 @@ public:
 
 	ant& front() { return sub.front(); }
 
-	void print(bool subToo = true);
+	void print(bool subToo = true) const;
 
 	void setGoal(const position& _goal) { goal = _goal; }
 
@@ -58,7 +57,7 @@ public:
 	/*Look into the map to the direction "d"
 	 * Returns the land.
 	 * */
-	 land look(direction d);
+	land look(direction d) const;
 };
 
 
@@ -228,7 +227,7 @@ bool ant::moveToGoal() {
 }
 */
 
-land ant::look(direction d) {
+land ant::look(direction d) const {
 	position wereLookingTo = pos + directionToVect(d);
 	auto l = m->operator()(wereLookingTo.x, wereLookingTo.y);
 	return l;
@@ -241,7 +240,7 @@ void ant::addNSub(unsigned int n) {
 		addSub(_x, _y++, life);
 }
 
-void ant::print(bool subToo) {
+void ant::print(bool subToo) const {
 	pge->Draw(pos, olc::BLACK);
 	if(subToo)
 		for(auto i: sub)

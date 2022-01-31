@@ -12,6 +12,7 @@ class Example : public olc::PixelGameEngine
 public:
 	int width, height;
 	map m;
+
 	ant a;
 	std::set<ant*> selectedAnts;
 	float timePassed = 0.0;
