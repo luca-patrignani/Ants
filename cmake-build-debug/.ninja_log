@@ -1,5 +1,7 @@
 # ninja log v5
-30	6707	6651720978499222	CMakeFiles/provaCLion.dir/olcPixelGameEngine.cpp.obj	30e866dc800d5a30
-7	4816	6652540854758387	CMakeFiles/provaCLion.dir/main.cpp.obj	d0f5ea15593c25cb
-4817	6463	6652540871202039	provaCLion.exe	3a93f6a3f22a1cb1
+3	5094	6653468705372395	CMakeFiles/provaCLion.dir/olcPixelGameEngine.cpp.obj	30e866dc800d5a30
+4	5911	6654317532066062	CMakeFiles/provaCLion.dir/main.cpp.obj	d0f5ea15593c25cb
+5911	7530	6654317548597225	provaCLion.exe	3a93f6a3f22a1cb1
 4	502	6649758126329724	CMakeFiles/provaCLion.dir/Tests/main.cpp.obj	c392963cdc6e299
+2	3019	6655314434194219	CMakeFiles/provaCLion.dir/main.cpp.obj	d0f5ea15593c25cb
+3020	4236	6655314446349738	provaCLion.exe	3a93f6a3f22a1cb1

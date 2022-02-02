@@ -13,19 +13,13 @@ class ant {
 public:
 	position pos;
 	position goal;
-	direction previous = DOWN;
-	unsigned life{};
-	bool ifCarryFood{};
 	std::list<ant> sub;
 	olc::PixelGameEngine* pge{};
 	map* m{};
 
 public:
 	ant() = default;
-	/*
-	Construct the ant
-	*/
-	ant(int _x, int _y, unsigned _life, olc::PixelGameEngine* _pge, map* _m, const position& _goal);
+	ant(int _x, int _y, olc::PixelGameEngine *_pge, map *_m, const position &_goal);
 
 	/*
 	Move the ant "a" according to direction "dir",
@@ -35,23 +29,31 @@ public:
 
 	/* Add a new  subordinate ant stream position x, y
 	*/
-	void addSub(unsigned _x, unsigned _y, unsigned _life);
+	void addSub(unsigned _x, unsigned _y);
 
 	/* Search an ant according to its position among ant's subordinate and itself.
 	 * Returns the pointer to the ant found, nullptr if not found,
 	 */
 	ant* searchSub(position _pos, ant* a = nullptr);
 
-	/* Add "n" subordinates
+	/* Add "n" subordinates to the ant.
+	 * Returns none.
 	 * */
 	void addNSub(unsigned n);
 
+	/* Returns the reference to the first subordinate ant.
+	 */
 	ant& front() { return sub.front(); }
 
+	/* Draw the ant to the olc::pge screen, if "subToo" the it draws also all its subordinates.
+	 * Returns none.
+	 */
 	void print(bool subToo = true) const;
 
-	void setGoal(const position& _goal) { goal = _goal; }
-
+	/* Move the ant towards the "goal".
+	 * Returns true if the ant has actually moved,
+	 * else false.
+	 */
 	bool moveToGoal(bool subToo);
 
 	/*Look into the map to the direction "d"
@@ -62,9 +64,8 @@ public:
 
 
 
-ant::ant(int _x, int _y, unsigned _life, olc::PixelGameEngine* _pge, map* _m, const position& _goal = NULLPOS):
-	pos(_x, _y), life(_life), pge(_pge), m(_m) {
-	ifCarryFood = false;
+ant::ant(int _x, int _y, olc::PixelGameEngine *_pge, map *_m, const position &_goal = NULLPOS) :
+	pos(_x, _y), pge(_pge), m(_m) {
 	sub = std::list<ant>();
 	if(_goal == NULLPOS)
 		goal = pos;
@@ -90,7 +91,7 @@ bool ant::move(direction dir) {
 		default: return false;
 	}
 
-	if (!m->crossable(x, y)) // if that piece of land is not crossable
+	if (!m->traversable(x, y)) // if that piece of land is not traversable
 		return false;
 	else {
 		pos.y = y;
@@ -99,8 +100,8 @@ bool ant::move(direction dir) {
 	}
 }
 
-void ant::addSub(unsigned _x, unsigned _y, unsigned _life) {
-	sub.emplace_back(ant(_x, _y, _life, pge, m));
+void ant::addSub(unsigned _x, unsigned _y) {
+	sub.emplace_back(ant(_x, _y, pge, m));
 }
 
 ant *ant::searchSub(position _pos, ant* a) {
@@ -136,7 +137,6 @@ bool ant::moveToGoal(bool subToo) {
 	// Prime solution
 	direction movement = vectToDirection(p0_p.x, p0_p.y);
 	if(move(movement)) {
-		previous = movement;
 		return true;
 	}
 /*
@@ -237,7 +237,7 @@ void ant::addNSub(unsigned int n) {
 	auto _x = pos.x + 1;
 	auto _y = pos.y;
 	for(unsigned i = 0; i < n; ++i)
-		addSub(_x, _y++, life);
+		addSub(_x, _y++);
 }
 
 void ant::print(bool subToo) const {

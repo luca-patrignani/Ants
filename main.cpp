@@ -3,11 +3,12 @@
 #include "ant.h"
 #include "map.h"
 #include "MapDrawer.h"
-#include "inputHandler.h"
+#include "selector.h"
+#include "bridge.h"
 #include <set>
 
 // Override base class with your custom functionality
-class Example : public olc::PixelGameEngine
+class antsGame : public olc::PixelGameEngine
 {
 public:
 	int width, height;
@@ -16,16 +17,15 @@ public:
 	ant a;
 	std::set<ant*> selectedAnts;
 	float timePassed = 0.0;
-	inputHandler ih;
+	selector ih;
 
-	Example(int _width, int _height): width(_width), height(_height), m(width, height, this), ih(&a)
+	antsGame(int _width, int _height): width(_width), height(_height), m(width, height, this), ih(&a)
 	{
-		// Name your application
-		sAppName = "Example";
-		a = ant(50, 10, 10, this, &m);
+		sAppName = "Ants";
+		a = ant(50, 10, this, &m);
 		a.addNSub(5);
 		a.front().addNSub(4);
-		ih = inputHandler(&a);
+
 	}
 
 public:
@@ -45,6 +45,8 @@ public:
 		// Called once at the start, so create things here
 		
 		//m(1, 1) = HILL;
+		auto _bridge = bridge();
+		m.addMapObject(_bridge, {0, 0});
 		m.print();
 		return true;
 	}
@@ -55,7 +57,7 @@ public:
 		if(GetMouse(olc::Mouse::RIGHT).bPressed)
 			ih.singleSelection(GetMouseX(), GetMouseY());
 		if(GetMouse(olc::Mouse::LEFT).bPressed)
-			ih.subSelection(ih.selectAnt(GetMouseX(), GetMouseY()), !GetKey(olc::CTRL).bHeld);
+			ih.subSelection(ih.searchAnt(GetMouseX(), GetMouseY()), !GetKey(olc::CTRL).bHeld);
 		if(GetKey(olc::G).bPressed)
 			ih.setGoal(GetMouseX(), GetMouseY(), [](int& x){x += 5;});
 		if(GetKey(olc::DEL).bPressed)
@@ -84,8 +86,8 @@ int main()
 	constexpr int width = 200, height = 200;
 	std::string filename = "../maps/firstMap.map";
 	//MapDrawer demo(filename);
-	Example demo(width, height); demo.m = map(filename, &demo);
-	if (demo.Construct(width, height, 8, 8))
+	antsGame demo(width, height); demo.m = map(filename, &demo);
+	if (demo.Construct(width, height, 12, 12))
 		demo.Start();
 	return 0;
 }
